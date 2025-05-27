@@ -10,9 +10,40 @@ class Handler():
         self.cursor.execute(f'''SELECT * FROM {tableName}''')
         data = self.cursor.fetchall()
         return data
+    
+    def CreateDb(self):
+        try:
+            self.conn = sqlite3.connect(self.dbName, check_same_thread=False)
+            print("Connection Stablished")
+        except:
+            print("Something went wrong")
+    
+    def CreateTable(self, command):
+        self.cursor.execute(command)
+
+    def GetColumn(self, tableName, column):
+        self.cursor.execute(f'''SELECT {column} FROM {tableName}''')
+        data = self.cursor.fetchall()
+        return data
+    
+    def Pragma(self):
+        self.cursor.execute(f'''PRAGMA automatic_index''')
+        data = self.cursor.fetchall()
+        for i in data:
+            print(i)
 
 if __name__ == "__main__":
-    dbName = "C:\API\API\ApiDb.db"
+    dbName = "C:\GUI\GUI\guiDb.db"
+    command = '''CREATE TABLE IF NOT EXISTS Layout(
+    id INTEGER PRIMARY KEY,
+    Window VARCHAR(50) NOT NULL,
+    label INTEGER NOT NULL,
+    entry INTEGER NOT NULL,
+    button INTEGER NOT NULL
+    )'''
     db = Handler(dbName)
-    data = db.GetTable("Endpoints")
-    print(data)
+    # data = db.GetTable("Endpoints")
+    # print(data)
+    # db.CreateDb()
+    # db.CreateTable(command)
+    db.Pragma()
